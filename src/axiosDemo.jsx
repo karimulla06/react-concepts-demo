@@ -12,28 +12,50 @@ export default function AxiosDemo() {
   // },[]);
 
   React.useEffect(async ()=>{
-    const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
-    setData(response.data);
+    try{
+      const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+      setData(response.data);
+    } catch(e){
+      console.log(e.message);
+    }
   },[]);
 
   const handleAddPost = async () => {
     const obj = {title:"Title", body: "body"};
     const endpoint = 'https://jsonplaceholder.typicode.com/posts';
-    const response = await axios.post(endpoint,obj); //Create
-    console.log(reponse.data);
+    try{
+      const response = await axios.post(endpoint,obj); //Create
+      console.log(reponse.data);
+    } catch(e){
+      console.log(e.message);
+    }
   };
 
   const handleUpdatePost = async (post) => {
     post.title = "Updated Title";
     const endpoint = `https://jsonplaceholder.typicode.com/posts/${post.id}`;
-    const response = await axios.put(endpoint,post); // put -> entire object to update
-    //await axios.patch(endpoint,{title:"Updated Title"}); // patch -> only prop to update
-    console.log(reponse);
+    try{
+      const response = await axios.put(endpoint,post); 
+      // put -> entire object to update
+      // await axios.patch(endpoint,{title:"Updated Title"}); 
+      // patch -> only prop to update
+      console.log(reponse);
+    } catch(e){
+      console.log(e.message);
+    }
   };
 
   const handleDeletePost = async (post) => {
     const endpoint = `https://jsonplaceholder.typicode.com/posts/${post.id}`;
-    await axios.delete(endpoint);
+    try{
+      await axios.delete(endpoint);
+    } catch(e){
+      if(e.response && e.reponse.state === 404){
+        alert('This Post is already deleted!')
+      } else{
+        console.log(e.message);
+      }
+    }
   };
 
   return (
